@@ -4,7 +4,7 @@ import { UserModel } from "../../models/user"
 import sha256 from "crypto-js/sha256";
 import jwt from "jsonwebtoken";
 import { createJWTObjectFromUser } from "../../utils/auth";
-import { handleMongooseError } from "../../utils/handleMongooseError";
+import { sendError } from "../../utils/sendError";
 
 app.post("/login", async (req, resp) => {
     const encryptedPassword = sha256(req.body.password)
@@ -23,12 +23,13 @@ app.post("/login", async (req, resp) => {
         }).exec()
 
         if (!user) {
-            throw new MongooseError("Wrong credentials")
+            sendError("Wrong credentials", resp)
+            return
         }
 
         resp.status(200).send(createJWTObjectFromUser(user))
     }
     catch (error: any) {
-        handleMongooseError(error, resp)
+        sendError(error, resp)
     }
 })

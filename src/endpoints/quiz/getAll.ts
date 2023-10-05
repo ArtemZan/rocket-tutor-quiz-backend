@@ -2,9 +2,12 @@ import { Request, Response } from "express";
 import { app } from "../../app";
 import { QuizModel, createQuizResponseDTO } from "../../models/quiz";
 import { getPaginationOptions } from "../../utils/pagination"
-import { handleMongooseError } from "../../utils/handleMongooseError";
+import { sendError } from "../../utils/sendError";
+import { MongooseError } from "mongoose";
 
-app.get("/quiz/all", async (req, resp) => {
+app.get("/quiz/all", getQuizzes)
+
+async function getQuizzes(req: Request, resp: Response){
     const pagination = getPaginationOptions(req.query as any)
     if (!pagination) {
         resp.status(400).send({
@@ -17,6 +20,7 @@ app.get("/quiz/all", async (req, resp) => {
         const quizzes = await QuizModel.find({}, null, { ...pagination }).exec()
         const total = await QuizModel.count()
 
+        // Converting to JSON reveals the hidden fields
         const DTO = JSON.parse(JSON.stringify(quizzes)).map(createQuizResponseDTO)
 
         resp.status(200).send({
@@ -25,6 +29,6 @@ app.get("/quiz/all", async (req, resp) => {
         })
     }
     catch (error: any) {
-        handleMongooseError(error, resp)
+        sendError(error, resp)
     }
-})
+}

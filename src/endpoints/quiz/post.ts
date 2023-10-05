@@ -2,12 +2,10 @@ import { Request, Response } from "express";
 import { app } from "../../app";
 import { QuizModel } from "../../models/quiz";
 import { MongooseError } from "mongoose";
-import { handleMongooseError } from "../../utils/handleMongooseError";
+import { sendError } from "../../utils/sendError";
 
 
-app.post("/quiz", (req, resp) => {
-    createQuiz(req, resp)
-})
+app.post("/quiz", createQuiz)
 
 async function createQuiz(req: Request, resp: Response) {
     const quiz = req.body
@@ -19,7 +17,7 @@ async function createQuiz(req: Request, resp: Response) {
         })
     }
     catch (error: any) {
-        handleMongooseError(error, resp)
+        sendError(error, resp)
         return
     }
 

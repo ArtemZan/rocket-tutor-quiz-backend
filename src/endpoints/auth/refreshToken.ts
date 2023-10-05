@@ -1,6 +1,7 @@
 import { app } from "../../app";
 import { UserType } from "../../models/user";
 import { createJWTObjectFromUser, validateJWT } from "../../utils/auth";
+import { sendError as sendError } from "../../utils/sendError";
 
 app.post("/refresh-token", (req, resp) => {
     const refreshToken = req.body.refreshToken
@@ -8,9 +9,7 @@ app.post("/refresh-token", (req, resp) => {
     const validated = validateJWT(refreshToken)
 
     if(!validated.valid){
-        resp.status(400).send({
-            error: validated.expired ? "Expired token" : "Malicious token"
-        })
+        sendError(validated.expired ? "Expired token" : "Malicious token", resp)
         return
     }
 
