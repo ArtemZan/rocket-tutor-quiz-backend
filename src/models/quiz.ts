@@ -10,6 +10,7 @@ export type Option = {
 export type QuizType = {
     question: string
     options: Option[]
+    authorId: string
 }
 
 
@@ -36,6 +37,11 @@ export const quizSchema = new Schema(
                 },
                 message: () => `There must be at least two options.`
             }
+        },
+        author: {
+            type: ObjectId,
+            ref: "User",
+            required: true
         }
     }
 )

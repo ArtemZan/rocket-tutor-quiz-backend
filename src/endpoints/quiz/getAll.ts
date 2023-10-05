@@ -17,7 +17,7 @@ async function getQuizzes(req: Request, resp: Response){
     }
 
     try {
-        const quizzes = await QuizModel.find({}, null, { ...pagination }).exec()
+        const quizzes = await QuizModel.find({}, null, { ...pagination }).populate("author", "name").exec()
         const total = await QuizModel.count()
 
         // Converting to JSON reveals the hidden fields

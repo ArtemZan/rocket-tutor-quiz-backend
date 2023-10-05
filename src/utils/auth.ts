@@ -6,7 +6,7 @@ import jwt from "jsonwebtoken"
 export function parseAuthHeader(req: Request, resp: Response) {
     const authHeader = req.headers.authorization
 
-    const authHeaderFormatValid = authHeader?.slice(0, 7) === "Bearer "
+    const authHeaderFormatValid = authHeader?.slice(0, 6) === "Bearer"
 
     if (!authHeader || !authHeaderFormatValid) {
         resp.sendStatus(401)

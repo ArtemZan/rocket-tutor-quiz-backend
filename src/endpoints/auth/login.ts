@@ -17,7 +17,7 @@ app.post("/login", async (req, resp) => {
                     name: req.body.username
                 },
                 {
-                    email: req.body.email
+                    email: req.body.username
                 }
             ]
         }).exec()

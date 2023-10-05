@@ -19,11 +19,12 @@ export function authMiddleware(req: Request, resp: Response, next: NextFunction)
 
     const token = parseAuthHeader(req, resp)
 
+    
     if (!token) {
         resp.sendStatus(401)
         return
     }
-
+    
     const validatedToken = validateJWT(token)
 
     if (!validatedToken.valid) {
