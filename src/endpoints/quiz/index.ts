@@ -1,0 +1,2 @@
+import "./getAll"
+import "./post"
